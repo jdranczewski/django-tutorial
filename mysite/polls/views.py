@@ -12,7 +12,7 @@ def index(request):
 
 def detail(request, question_id):
     q = get_object_or_404(Question, pk=question_id)
-    return HttpResponse("You're looking at question %s." % question_id)
+    return render(request, 'polls/detail.html', {'question': q})
 
 
 def results(request, question_id):
