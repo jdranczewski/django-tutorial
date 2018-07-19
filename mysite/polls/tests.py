@@ -77,3 +77,17 @@ class QuestionIndexViewTest(TestCase):
             response.context['latest_question_list'],
             ['<Question: Past question 1>', '<Question: Past question 2>']
         )
+
+
+class QuestionDetailViewTest(TestCase):
+    def test_future_question(self):
+        future_question = create_question(question_text="Past question", days=30)
+        url = reverse('polls:detail', args=(future_question.id,))
+        response = self.client.get(url)
+        self.assertEqual(response.status_code,404)
+
+    def test_past_question(self):
+        future_question = create_question(question_text="Future question", days=-30)
+        url = reverse('polls:detail', args=(future_question.id,))
+        response = self.client.get(url)
+        self.assertContains(response, future_question.question_text)
